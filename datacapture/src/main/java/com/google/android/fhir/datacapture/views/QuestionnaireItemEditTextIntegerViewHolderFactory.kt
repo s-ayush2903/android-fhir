@@ -45,15 +45,15 @@ object QuestionnaireItemEditTextIntegerViewHolderFactory :
             }
 
             override fun validateMaxValue(extension: Extension, inputValue: String): Boolean {
-                if (extension.value.hasInteger()
-                        && inputValue.isNotEmpty()
-                        && inputValue.isNotBlank()) {
+                if (extension.value.hasInteger() &&
+                        inputValue.isNotEmpty() &&
+                        inputValue.isNotBlank()) {
 
-                    if(!inputValue.isDigitsOnly()){
+                    if (!inputValue.isDigitsOnly()) {
                         return true
                     }
 
-                    if(inputValue.toInt() > extension.value.integer.value) {
+                    if (inputValue.toInt() > extension.value.integer.value) {
                         return true
                     }
                 }
@@ -61,14 +61,14 @@ object QuestionnaireItemEditTextIntegerViewHolderFactory :
             }
 
             override fun validateMinValue(extension: Extension, inputValue: String): Boolean {
-                if (extension.value.hasInteger()
-                        && inputValue.isNotEmpty()
-                        && inputValue.isNotBlank()) {
+                if (extension.value.hasInteger() &&
+                        inputValue.isNotEmpty() &&
+                        inputValue.isNotBlank()) {
 
-                    if(!inputValue.isDigitsOnly()){
+                    if (!inputValue.isDigitsOnly()) {
                         return true
                     }
-                    if(inputValue.toInt() < extension.value.integer.value) {
+                    if (inputValue.toInt() < extension.value.integer.value) {
                         return true
                     }
                 }
