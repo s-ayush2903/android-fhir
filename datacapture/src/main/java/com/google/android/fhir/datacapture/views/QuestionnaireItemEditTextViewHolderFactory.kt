@@ -22,6 +22,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.google.android.fhir.datacapture.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.fhir.r4.core.Extension
 import com.google.fhir.r4.core.QuestionnaireResponse
 
 abstract class QuestionnaireItemEditTextViewHolderFactory : QuestionnaireItemViewHolderFactory(
@@ -45,7 +46,10 @@ abstract class QuestionnaireItemEditTextViewHolderDelegate(
         textInputEditText.setRawInputType(rawInputType)
         textInputEditText.isSingleLine = isSingleLine
         textInputEditText.doAfterTextChanged { editable: Editable? ->
-            questionnaireItemViewItem.singleAnswerOrNull = getValue(editable.toString())
+            if (validateAnswer(editable.toString()))
+                questionnaireItemViewItem.singleAnswerOrNull = getValue(editable.toString())
+            else
+                questionnaireItemViewItem.singleAnswerOrNull = null
         }
     }
 
@@ -63,4 +67,40 @@ abstract class QuestionnaireItemEditTextViewHolderDelegate(
      * answer to the question (may be input by the user or previously recorded).
      */
     abstract fun getText(answer: QuestionnaireResponse.Item.Answer.Builder?): String
+
+    private fun validateAnswer(inputValue: String): Boolean {
+        val extensionIterator = questionnaireItemViewItem.questionnaireItem.extensionList.iterator()
+        while (extensionIterator.hasNext()) {
+            val extension = extensionIterator.next()
+            when (extension.url.value) {
+                EXTENSION_MAX_VALUE -> {
+                    if (validateMaxValue(extension, inputValue)) {
+                        textInputLayout.error = "Error value!"
+                        break
+                    } else {
+                        textInputLayout.error = null
+                    }
+                }
+
+                EXTENSION_MIN_VALUE -> {
+                    if (validateMinValue(extension, inputValue)) {
+                        textInputLayout.error = "Error value!"
+                        break
+                    } else {
+                        textInputLayout.error = null
+                    }
+                }
+            }
+        }
+        return textInputLayout.error == null
+    }
+
+    abstract fun validateMaxValue(extension: Extension, inputValue: String): Boolean
+
+    abstract fun validateMinValue(extension: Extension, inputValue: String): Boolean
+
+    private companion object {
+        const val EXTENSION_MAX_VALUE = "http://hl7.org/fhir/StructureDefinition/maxValue"
+        const val EXTENSION_MIN_VALUE = "http://hl7.org/fhir/StructureDefinition/minValue"
+    }
 }
