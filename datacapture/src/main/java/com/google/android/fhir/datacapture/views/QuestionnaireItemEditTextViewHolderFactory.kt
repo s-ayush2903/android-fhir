@@ -20,6 +20,7 @@ import android.text.Editable
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.fhir.datacapture.R
+import com.google.android.fhir.datacapture.validation.QuestionnaireItemValidator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.fhir.r4.core.QuestionnaireResponse
@@ -46,7 +47,13 @@ abstract class QuestionnaireItemEditTextViewHolderDelegate(
         textInputEditText.isSingleLine = isSingleLine
         textInputEditText.doAfterTextChanged { editable: Editable? ->
             questionnaireItemViewItem.singleAnswerOrNull = getValue(editable.toString())
-            validate(questionnaireItemViewItem, textInputLayout)
+            val validationResult = QuestionnaireItemValidator.validate(questionnaireItemViewItem.questionnaireItem, questionnaireItemViewItem.questionnaireResponseItemBuilder)
+            if(!validationResult.isValid) {
+                textInputLayout.error = validationResult.messages[0]
+                questionnaireItemViewItem.questionnaireResponseItemBuilder.clearAnswer()
+            } else {
+                textInputLayout.error = null
+            }
         }
     }
 
@@ -69,5 +76,4 @@ abstract class QuestionnaireItemEditTextViewHolderDelegate(
      * Validates the input data if there is any behavioral extension in the Questionnaire and
      * renders the View accordingly
      */
-    abstract fun validate(questionnaireItemViewItem: QuestionnaireItemViewItem, textInputLayout: TextInputLayout)
 }

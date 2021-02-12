@@ -17,8 +17,6 @@
 package com.google.android.fhir.datacapture.views
 
 import android.text.InputType
-import com.google.android.fhir.datacapture.validation.QuestionnaireItemIntegerValidator
-import com.google.android.material.textfield.TextInputLayout
 import com.google.fhir.r4.core.Integer
 import com.google.fhir.r4.core.QuestionnaireResponse
 
@@ -39,20 +37,8 @@ object QuestionnaireItemEditTextIntegerViewHolderFactory :
                         }
                 }
             }
-
             override fun getText(answer: QuestionnaireResponse.Item.Answer.Builder?): String {
                 return answer?.value?.integer?.value?.toString() ?: ""
             }
-
-                override fun validate(questionnaireItemViewItem: QuestionnaireItemViewItem, textInputLayout: TextInputLayout) {
-                    val validate = QuestionnaireItemIntegerValidator().validate(questionnaireItemViewItem.questionnaireItem,
-                            questionnaireItemViewItem.questionnaireResponseItemBuilder)
-                    if (!validate.pass) {
-                        questionnaireItemViewItem.singleAnswerOrNull = null
-                        textInputLayout.error = validate.errorMsgs[0]
-                    } else {
-                        textInputLayout.error = null
-                    }
-                }
             }
 }
