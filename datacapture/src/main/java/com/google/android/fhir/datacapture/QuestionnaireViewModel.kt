@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.map
 internal class QuestionnaireViewModel(state: SavedStateHandle) : ViewModel() {
     /** The current questionnaire as questions are being answered. */
     private val questionnaire: Questionnaire
-
+    private var cnt = 0
     init {
         val questionnaireJson: String = state[QuestionnaireFragment.BUNDLE_KEY_QUESTIONNAIRE]!!
         val builder = Questionnaire.newBuilder()
@@ -39,15 +39,26 @@ internal class QuestionnaireViewModel(state: SavedStateHandle) : ViewModel() {
     }
 
     /** The current questionnaire response as questions are being answered. */
-    private val questionnaireResponseBuilder = QuestionnaireResponse.newBuilder()
+    private var questionnaireResponseBuilder = QuestionnaireResponse.newBuilder()
 
     init {
-        questionnaireResponseBuilder.questionnaire =
-            Canonical.newBuilder().setValue(questionnaire.id.value).build()
-        // Retain the hierarchy and order of items within the questionnaire as specified in the
-        // standard. See https://www.hl7.org/fhir/questionnaireresponse.html#notes.
-        questionnaire.itemList.forEach {
-            questionnaireResponseBuilder.addItem(it.createQuestionnaireResponseItem())
+        val questionnaireJsonResponseString: String? =
+            state[QuestionnaireFragment.BUNDLE_KEY_QUESTIONNAIRE_RESPONSE]
+        questionnaireJsonResponseString?.let {
+            val questionnaireResponse =
+                JsonFormat.getParser()
+                    .merge(questionnaireJsonResponseString, questionnaireResponseBuilder)
+                    .build()
+            validateQuestionnaireResponse(questionnaire.itemList, questionnaireResponse.itemList)
+            questionnaireResponseBuilder = questionnaireResponse.toBuilder()
+        } ?: run {
+            questionnaireResponseBuilder.questionnaire =
+                Canonical.newBuilder().setValue(questionnaire.id.value).build()
+            // Retain the hierarchy and order of items within the questionnaire as specified in the
+            // standard. See https://www.hl7.org/fhir/questionnaireresponse.html#notes.
+            questionnaire.itemList.forEach {
+                questionnaireResponseBuilder.addItem(it.createQuestionnaireResponseItem())
+            }
         }
     }
 
@@ -91,8 +102,9 @@ internal class QuestionnaireViewModel(state: SavedStateHandle) : ViewModel() {
     }
 
     /**
-     * Traverse (DFS) through the list of questionnaire items and the list of questionnaire response
-     * items and populate [questionnaireItemViewItemList] with matching pairs of questionnaire item
+     * Traverse (DFS) through the list of questionnaire items , the list of questionnaire response
+     * items and the list of items in the questionnaire response answer list and populate
+     * [questionnaireItemViewItemList] with matching pairs of questionnaire item
      * and questionnaire response item.
      *
      * The traverse is carried out in the two lists in tandem. The two lists should be structurally
@@ -129,6 +141,18 @@ internal class QuestionnaireViewModel(state: SavedStateHandle) : ViewModel() {
                         questionnaireResponseItem.itemBuilderList
                     )
                 )
+                if (questionnaireResponseItem.answerCount> 0) {
+                    questionnaireResponseItem.answerBuilderList?.forEach {
+                        if (it.itemCount> 0) {
+                            questionnaireItemViewItemList.addAll(
+                                getQuestionnaireItemViewItemList(
+                                    questionnaireItem.itemList,
+                                    it.itemBuilderList
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
         return questionnaireItemViewItemList
@@ -151,4 +175,35 @@ private fun Questionnaire.Item.createQuestionnaireResponseItem():
             this.addItem(it.createQuestionnaireResponseItem())
         }
     }
+}
+
+/**
+ * Traverse (DFS) through the list of questionnaire items and the list of questionnaire response
+ * items and check if the linkid of the matching pairs of questionnaire item and questionnaire
+ * response item are equal.
+ * The traverse is carried out in the two lists in tandem. The two lists should be structurally
+ * identical.
+ */
+fun validateQuestionnaireResponse(
+    questionnaireItemList: List<Questionnaire.Item>,
+    questionnaireResponseItemList: List<QuestionnaireResponse.Item>
+): Boolean {
+    val questionnaireItemListIterator = questionnaireItemList.iterator()
+    val questionnaireResponseItemListIterator = questionnaireResponseItemList.iterator()
+    while (
+        questionnaireItemListIterator.hasNext() &&
+        questionnaireResponseItemListIterator.hasNext()
+    ) {
+        val questionnaireItem = questionnaireItemListIterator.next()
+        val questionnaireResponseItem = questionnaireResponseItemListIterator.next()
+        if (questionnaireItemListIterator.hasNext()
+                .xor(questionnaireResponseItemListIterator.hasNext()))
+            throw IllegalArgumentException("Structure mismatch")
+        if (!questionnaireItem.linkId.equals(questionnaireResponseItem.linkId))
+            throw IllegalArgumentException("linkId mismatch")
+        validateQuestionnaireResponse(
+            questionnaireItem.itemList,
+            questionnaireResponseItem.itemList)
+    }
+    return true
 }
