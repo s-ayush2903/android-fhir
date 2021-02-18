@@ -20,6 +20,7 @@ import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import com.google.fhir.common.JsonFormat
+import com.google.fhir.r4.core.Boolean
 import com.google.fhir.r4.core.Canonical
 import com.google.fhir.r4.core.Id
 import com.google.fhir.r4.core.Questionnaire
@@ -27,6 +28,7 @@ import com.google.fhir.r4.core.QuestionnaireItemTypeCode
 import com.google.fhir.r4.core.QuestionnaireResponse
 import com.google.fhir.r4.core.String
 import com.google.fhir.shaded.protobuf.Message
+import kotlin.test.assertFailsWith
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -160,6 +162,158 @@ class QuestionnaireViewModelTest {
             .isEqualTo(QuestionnaireItemTypeCode.Value.STRING)
         assertThat(secondQuestionnaireItemViewItem.questionnaireResponseItemBuilder.linkId.value)
             .isEqualTo("another-link-id")
+    }
+
+    @Test
+    fun validateQuestionnaireResponse_shouldReturnTrue() {
+        val questionnaire = Questionnaire.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire").build()
+            addItem(Questionnaire.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-link-id").build()
+                text = String.newBuilder().setValue("Basic question").build()
+                type = Questionnaire.Item.TypeCode.newBuilder()
+                    .setValue(QuestionnaireItemTypeCode.Value.BOOLEAN).build()
+            })
+        }.build()
+        val questionnaireResponse = QuestionnaireResponse.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire-response").build()
+            addItem(QuestionnaireResponse.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-link-id").build()
+                addAnswer(
+                    QuestionnaireResponse.Item.Answer.newBuilder()
+                        .setValue(
+                            QuestionnaireResponse.Item.Answer.ValueX.newBuilder()
+                                .setBoolean(
+                                    Boolean.newBuilder().setValue(true)
+                                )
+                        )
+                )
+            })
+        }.build()
+
+        assertThat(
+            validateQuestionnaireResponse(questionnaire.itemList, questionnaireResponse.itemList)
+        ).isTrue()
+    }
+
+    @Test
+    fun validateQuestionnaireResponse_shouldReturnThrowError_wrongLinkId() {
+        val questionnaire = Questionnaire.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire").build()
+            addItem(Questionnaire.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-link-id").build()
+                text = String.newBuilder().setValue("Basic question").build()
+                type = Questionnaire.Item.TypeCode.newBuilder()
+                    .setValue(QuestionnaireItemTypeCode.Value.BOOLEAN).build()
+            })
+        }.build()
+        val questionnaireResponse = QuestionnaireResponse.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire-response").build()
+            addItem(QuestionnaireResponse.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-different-link-id").build()
+                addAnswer(
+                    QuestionnaireResponse.Item.Answer.newBuilder()
+                        .setValue(
+                            QuestionnaireResponse.Item.Answer.ValueX.newBuilder()
+                                .setBoolean(
+                                    Boolean.newBuilder().setValue(true)
+                                )
+                        )
+                )
+            })
+        }.build()
+
+        val errorMessage = assertFailsWith<IllegalArgumentException> {
+            validateQuestionnaireResponse(questionnaire.itemList, questionnaireResponse.itemList)
+        }.localizedMessage
+
+        assertThat(errorMessage).isEqualTo("linkId mismatch")
+    }
+
+    @Test
+    fun validateQuestionnaireResponse_shouldReturnThrowError_wrongStructure_moreItemsInQuestionnaireResponse() { // ktlint-disable max-line-length
+        val questionnaire = Questionnaire.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire").build()
+            addItem(Questionnaire.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-link-id").build()
+                text = String.newBuilder().setValue("Basic question").build()
+                type = Questionnaire.Item.TypeCode.newBuilder()
+                    .setValue(QuestionnaireItemTypeCode.Value.BOOLEAN).build()
+            })
+        }.build()
+        val questionnaireResponse = QuestionnaireResponse.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire-response").build()
+            addItem(QuestionnaireResponse.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-link-id").build()
+                addAnswer(
+                    QuestionnaireResponse.Item.Answer.newBuilder()
+                        .setValue(
+                            QuestionnaireResponse.Item.Answer.ValueX.newBuilder()
+                                .setBoolean(
+                                    Boolean.newBuilder().setValue(true)
+                                )
+                        )
+                )
+            })
+            addItem(QuestionnaireResponse.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-different-link-id").build()
+                addAnswer(
+                    QuestionnaireResponse.Item.Answer.newBuilder()
+                        .setValue(
+                            QuestionnaireResponse.Item.Answer.ValueX.newBuilder()
+                                .setBoolean(
+                                    Boolean.newBuilder().setValue(true)
+                                )
+                        )
+                )
+            })
+        }.build()
+
+        val errorMessage = assertFailsWith<IllegalArgumentException> {
+            validateQuestionnaireResponse(questionnaire.itemList, questionnaireResponse.itemList)
+        }.localizedMessage
+
+        assertThat(errorMessage).isEqualTo("Structure mismatch")
+    }
+
+    @Test
+    fun validateQuestionnaireResponse_shouldReturnThrowError_wrongStructure_lessItemsInQuestionnaireResponse() { // ktlint-disable max-line-length
+        val questionnaire = Questionnaire.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire").build()
+            addItem(Questionnaire.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-link-id").build()
+                text = String.newBuilder().setValue("Basic question 1").build()
+                type = Questionnaire.Item.TypeCode.newBuilder()
+                    .setValue(QuestionnaireItemTypeCode.Value.BOOLEAN).build()
+            })
+            addItem(Questionnaire.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("another-link-id").build()
+                text = String.newBuilder().setValue("Basic question 2").build()
+                type = Questionnaire.Item.TypeCode.newBuilder()
+                    .setValue(QuestionnaireItemTypeCode.Value.BOOLEAN).build()
+            })
+        }.build()
+        val questionnaireResponse = QuestionnaireResponse.newBuilder().apply {
+            id = Id.newBuilder().setValue("a-questionnaire-response").build()
+            addItem(QuestionnaireResponse.Item.newBuilder().apply {
+                linkId = String.newBuilder().setValue("a-link-id").build()
+                addAnswer(
+                    QuestionnaireResponse.Item.Answer.newBuilder()
+                        .setValue(
+                            QuestionnaireResponse.Item.Answer.ValueX.newBuilder()
+                                .setBoolean(
+                                    Boolean.newBuilder().setValue(true)
+                                )
+                        )
+                )
+            })
+        }.build()
+
+        val errorMessage = assertFailsWith<IllegalArgumentException> {
+            validateQuestionnaireResponse(questionnaire.itemList, questionnaireResponse.itemList)
+        }.localizedMessage
+
+        assertThat(errorMessage).isEqualTo("Structure mismatch")
     }
 
     private companion object {
