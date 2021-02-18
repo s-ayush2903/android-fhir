@@ -221,8 +221,7 @@ class QuestionnaireItemAdapterTest {
                     Questionnaire.Item.newBuilder()
                         .setType(
                             Questionnaire.Item.TypeCode.newBuilder()
-                                .setValue(QuestionnaireItemTypeCode.Value.CHOICE)
-                        )
+                                .setValue(QuestionnaireItemTypeCode.Value.CHOICE))
                         .build(),
                     QuestionnaireResponse.Item.newBuilder()
                 ) {}
@@ -245,16 +244,8 @@ class QuestionnaireItemAdapterTest {
                                 Questionnaire.Item.AnswerOption.ValueX.newBuilder()
                                     .setCoding(
                                         Coding.newBuilder()
-                                            .setCode(
-                                                Code.newBuilder()
-                                                    .setValue("test-code")
-                                            )
-                                            .setDisplay(
-                                                String.newBuilder()
-                                                    .setValue("Test Code")
-                                            )
-                                    )
-                            )
+                                            .setCode(Code.newBuilder().setValue("test-code"))
+                                            .setDisplay(String.newBuilder().setValue("Test Code"))))
                             .build()
                     )
                 }
@@ -291,16 +282,8 @@ class QuestionnaireItemAdapterTest {
                                 Questionnaire.Item.AnswerOption.ValueX.newBuilder()
                                     .setCoding(
                                         Coding.newBuilder()
-                                            .setCode(
-                                                Code.newBuilder()
-                                                    .setValue("test-code")
-                                            )
-                                            .setDisplay(
-                                                String.newBuilder()
-                                                    .setValue("Test Code")
-                                            )
-                                    )
-                            )
+                                            .setCode(Code.newBuilder().setValue("test-code"))
+                                            .setDisplay(String.newBuilder().setValue("Test Code"))))
                             .build()
                     )
                 }
@@ -313,15 +296,13 @@ class QuestionnaireItemAdapterTest {
                     Questionnaire.Item.newBuilder()
                         .setType(
                             Questionnaire.Item.TypeCode.newBuilder()
-                                .setValue(QuestionnaireItemTypeCode.Value.CHOICE)
-                        )
+                                .setValue(QuestionnaireItemTypeCode.Value.CHOICE))
                         .addAllAnswerOption(answerOptions)
                         .addExtension(
                             Extension.newBuilder()
                                 .setUrl(
                                     Uri.newBuilder()
-                                        .setValue(EXTENSION_ITEM_CONTROL_URL)
-                                )
+                                        .setValue(EXTENSION_ITEM_CONTROL_URL))
                                 .setValue(
                                     Extension.ValueX.newBuilder()
                                         .setCodeableConcept(
@@ -330,22 +311,13 @@ class QuestionnaireItemAdapterTest {
                                                     Coding.newBuilder()
                                                         .setCode(
                                                             Code.newBuilder()
-                                                                .setValue(ITEM_CONTROL_RADIO_BUTTON)
-                                                        )
+                                                                .setValue(ITEM_CONTROL_RADIO_BUTTON)) // ktlint ignore max-line-limit
                                                         .setDisplay(
                                                             String.newBuilder()
-                                                                .setValue("Radio Button")
-                                                        )
+                                                                .setValue("Radio Button"))
                                                         .setSystem(
                                                             Uri.newBuilder()
-                                                                .setValue(
-                                                                    EXTENSION_ITEM_CONTROL_SYSTEM
-                                                                )
-                                                        )
-                                                )
-                                        )
-                                )
-                        )
+                                                                .setValue(EXTENSION_ITEM_CONTROL_SYSTEM)))))) // ktlint ignore max-line-limit
                         .build(),
                     QuestionnaireResponse.Item.newBuilder()
                 ) {}
@@ -366,8 +338,7 @@ class QuestionnaireItemAdapterTest {
                     Questionnaire.Item.newBuilder()
                         .setType(
                             Questionnaire.Item.TypeCode.newBuilder()
-                                .setValue(QuestionnaireItemTypeCode.Value.CHOICE)
-                        )
+                                .setValue(QuestionnaireItemTypeCode.Value.CHOICE))
                         .addExtension(
                             Extension.newBuilder()
                                 .setUrl(
@@ -382,22 +353,16 @@ class QuestionnaireItemAdapterTest {
                                                     Coding.newBuilder()
                                                         .setCode(
                                                             Code.newBuilder()
-                                                                .setValue(ITEM_CONTROL_DROP_DOWN)
-                                                        )
+                                                                .setValue(ITEM_CONTROL_DROP_DOWN))
                                                         .setDisplay(
                                                             String.newBuilder()
-                                                                .setValue("Drop Down")
-                                                        )
+                                                                .setValue("Drop Down"))
                                                         .setSystem(
                                                             Uri.newBuilder()
-                                                                .setValue(
-                                                                    EXTENSION_ITEM_CONTROL_SYSTEM
-                                                                )
-                                                        )
+                                                                .setValue(EXTENSION_ITEM_CONTROL_SYSTEM)) // ktlint-disable max-line-length
                                                 )
                                         )
-                                )
-                        )
+                                ))
                         .build(),
                     QuestionnaireResponse.Item.newBuilder()
                 ) {}
