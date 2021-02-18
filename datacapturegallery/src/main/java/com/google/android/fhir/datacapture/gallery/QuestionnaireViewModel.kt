@@ -33,4 +33,14 @@ class QuestionnaireViewModel(application: Application, private val state: SavedS
             }
             return questionnaireJson!!
         }
+    var questionnaireResponseJson: String? = null
+        get() {
+            if (state.contains(QuestionnaireActivity.QUESTIONNAIRE_RESPONSE_FILE_PATH_KEY)) {
+                questionnaireResponseJson = getApplication<Application>().assets
+                    .open(state[QuestionnaireActivity.QUESTIONNAIRE_RESPONSE_FILE_PATH_KEY]!!)
+                    .bufferedReader()
+                    .use { it.readText() }
+            }
+            return field
+        }
 }
