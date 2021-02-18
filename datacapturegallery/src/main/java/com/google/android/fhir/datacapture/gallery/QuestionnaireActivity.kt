@@ -43,7 +43,8 @@ class QuestionnaireActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             val fragment = QuestionnaireFragment()
             fragment.arguments = bundleOf(
-                QuestionnaireFragment.BUNDLE_KEY_QUESTIONNAIRE to viewModel.questionnaire
+                QuestionnaireFragment.BUNDLE_KEY_QUESTIONNAIRE to viewModel.questionnaire,
+                QuestionnaireFragment.BUNDLE_KEY_QUESTIONNAIRE_RESPONSE to viewModel.questionnaireResponseJson // ktlint-disable max-line-length
             )
 
             supportFragmentManager.commit {
@@ -86,6 +87,7 @@ class QuestionnaireActivity : AppCompatActivity() {
     companion object {
         const val QUESTIONNAIRE_TITLE_KEY = "questionnaire-title-key"
         const val QUESTIONNAIRE_FILE_PATH_KEY = "questionnaire-file-path-key"
+        const val QUESTIONNAIRE_RESPONSE_FILE_PATH_KEY = "questionnaire-response-file-path-key"
         const val QUESTIONNAIRE_FRAGMENT_TAG = "questionannire-fragment-tag"
     }
 }
