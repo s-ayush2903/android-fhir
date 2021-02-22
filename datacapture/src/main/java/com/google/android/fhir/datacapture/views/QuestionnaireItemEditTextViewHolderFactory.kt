@@ -26,15 +26,15 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.fhir.r4.core.QuestionnaireResponse
 
 abstract class QuestionnaireItemEditTextViewHolderFactory : QuestionnaireItemViewHolderFactory(
-    R.layout.questionnaire_item_edit_text_view
+        R.layout.questionnaire_item_edit_text_view
 ) {
     abstract override fun getQuestionnaireItemViewHolderDelegate():
-        QuestionnaireItemEditTextViewHolderDelegate
+            QuestionnaireItemEditTextViewHolderDelegate
 }
 
 abstract class QuestionnaireItemEditTextViewHolderDelegate(
-    private val rawInputType: Int,
-    private val isSingleLine: Boolean
+        private val rawInputType: Int,
+        private val isSingleLine: Boolean
 ) : QuestionnaireItemViewHolderDelegate {
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var textInputEditText: TextInputEditText
@@ -47,14 +47,27 @@ abstract class QuestionnaireItemEditTextViewHolderDelegate(
         textInputEditText.isSingleLine = isSingleLine
         textInputEditText.doAfterTextChanged { editable: Editable? ->
             questionnaireItemViewItem.singleAnswerOrNull = getValue(editable.toString())
-            val validationResult = QuestionnaireItemValidator.validate(questionnaireItemViewItem.questionnaireItem, questionnaireItemViewItem.questionnaireResponseItemBuilder)
-            if(!validationResult.isValid) {
-                textInputLayout.error = validationResult.messages[0]
+            val validationResults = QuestionnaireItemValidator.validate(questionnaireItemViewItem.questionnaireItem, questionnaireItemViewItem.questionnaireResponseItemBuilder)
+            applyValidationResults(validationResults)
+        }
+    }
+
+    private fun applyValidationResults(validationResults: List<QuestionnaireItemValidator.ValidationResult>) {
+        val messagesSeparator = '\n'
+        var validationMessages: String? = null
+        validationResults.forEach {
+            if (!it.isValid) {
+                if (validationMessages == null)
+                    validationMessages = it.messages[0]
+                else
+                    validationMessages = validationMessages.plus(it.messages[0]).plus(messagesSeparator)
                 questionnaireItemViewItem.questionnaireResponseItemBuilder.clearAnswer()
-            } else {
-                textInputLayout.error = null
             }
         }
+        if (validationMessages != null)
+            textInputLayout.error = validationMessages
+        else
+            textInputLayout.error = null
     }
 
     override fun bind(questionnaireItemViewItem: QuestionnaireItemViewItem) {
