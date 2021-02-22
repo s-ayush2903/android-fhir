@@ -84,9 +84,4 @@ abstract class QuestionnaireItemEditTextViewHolderDelegate(
      * answer to the question (may be input by the user or previously recorded).
      */
     abstract fun getText(answer: QuestionnaireResponse.Item.Answer.Builder?): String
-
-    /**
-     * Validates the input data if there is any behavioral extension in the Questionnaire and
-     * renders the View accordingly
-     */
 }
