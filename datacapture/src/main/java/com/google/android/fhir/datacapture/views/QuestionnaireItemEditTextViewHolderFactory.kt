@@ -25,9 +25,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.fhir.r4.core.QuestionnaireResponse
 
-abstract class QuestionnaireItemEditTextViewHolderFactory : QuestionnaireItemViewHolderFactory(
-        R.layout.questionnaire_item_edit_text_view
-) {
+abstract class QuestionnaireItemEditTextViewHolderFactory : QuestionnaireItemViewHolderFactory(R.layout.questionnaire_item_edit_text_view) {
     abstract override fun getQuestionnaireItemViewHolderDelegate():
             QuestionnaireItemEditTextViewHolderDelegate
 }
@@ -64,10 +62,7 @@ abstract class QuestionnaireItemEditTextViewHolderDelegate(
                 questionnaireItemViewItem.questionnaireResponseItemBuilder.clearAnswer()
             }
         }
-        if (validationMessages != null)
-            textInputLayout.error = validationMessages
-        else
-            textInputLayout.error = null
+        textInputLayout.error = if (validationMessages != null) validationMessages else null
     }
 
     override fun bind(questionnaireItemViewItem: QuestionnaireItemViewItem) {
