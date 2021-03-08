@@ -46,7 +46,7 @@ class SearchImpl constructor(val database: Database) : Search {
 
         override fun skip(skip: Int): Search.SearchSpecifications = apply { this.skip = skip }
 
-        override fun <R : Resource> run(): List<R> = database.search(
+        override suspend fun <R : Resource> run(): List<R> = database.search(
             SerializedResourceQuery(getResourceType(clazz),
                 filterCriterion?.query(clazz), sortCriterion, limit, skip))
     }

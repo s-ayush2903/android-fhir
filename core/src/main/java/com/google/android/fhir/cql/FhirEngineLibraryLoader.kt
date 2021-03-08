@@ -17,8 +17,10 @@
 package com.google.android.fhir.cql
 
 import com.google.android.fhir.db.Database
-import java.io.IOException
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.cqframework.cql.elm.execution.Library
+import java.io.IOException
 import org.cqframework.cql.elm.execution.VersionedIdentifier
 import org.opencds.cqf.cql.execution.JsonCqlLibraryReader
 import org.opencds.cqf.cql.execution.LibraryLoader
@@ -42,14 +44,17 @@ internal class FhirEngineLibraryLoader(private val database: Database) : Library
             .map { it.value }
             .firstOrNull()
         if (matchedLibrary != null) return matchedLibrary
-        val fhirLibrary = database.searchByString(
-            org.hl7.fhir.r4.model.Library::class.java,
-            LIBRARY_NAME_INDEX,
-            libraryIdentifier.id
-        )
+        var fhirLibrary: List<org.hl7.fhir.r4.model.Library>? = null
+        GlobalScope.launch {
+            fhirLibrary = database.searchByString(
+                org.hl7.fhir.r4.model.Library::class.java,
+                LIBRARY_NAME_INDEX,
+                libraryIdentifier.id
+            )
+        }
         // TODO: remove the assumption that there will be only one FHIR library resource which has one
         //  content element.
-        val stringReader = String(fhirLibrary.first().content.first().data).reader()
+        val stringReader = String(fhirLibrary!!.first().content.first().data).reader()
         return try {
             val cqlLibrary = JsonCqlLibraryReader.read(stringReader)
             _libraryMap[libraryIdentifier.id] = cqlLibrary

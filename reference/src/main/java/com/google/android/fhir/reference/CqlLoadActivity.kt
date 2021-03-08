@@ -73,6 +73,7 @@ class CqlLoadActivity : AppCompatActivity() {
 
         val evaluateButton = findViewById<Button>(R.id.evaluate_button)
         evaluateButton.setOnClickListener { v: View? ->
+            viewLifecycleOwner
             EvaluateAncLibrary()
                 .execute(
                     libraryInput.getText().toString(),
@@ -88,30 +89,30 @@ class CqlLoadActivity : AppCompatActivity() {
             var result: String? = ""
             var stream: InputStream? = null
             var resource: Resource? = null
-            try {
-                stream = URL(strings[0]).content as InputStream
-                val reader =
-                    BufferedReader(InputStreamReader(stream))
-                var line: String? = ""
-                while (line != null) {
-                    result += line
-                    line = reader.readLine()
-                }
-                val fhirContext = FhirContext.forR4()
-                resource = fhirContext.newJsonParser()
-                    .parseResource(result) as Resource
-                fhirEngine!!.save<Resource>(resource)
-                Snackbar.make(
-                    cqlLibraryUrlInput!!,
-                    "Loaded " + resource.resourceType.name + " with ID " + resource!!.id,
-                    Snackbar.LENGTH_SHORT)
-                    .show()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Snackbar.make(cqlLibraryUrlInput!!, "Something went wrong...",
-                    Snackbar.LENGTH_SHORT)
-                    .show()
-            }
+//            try {
+//                stream = URL(strings[0]).content as InputStream
+//                val reader =
+//                    BufferedReader(InputStreamReader(stream))
+//                var line: String? = ""
+//                while (line != null) {
+//                    result += line
+//                    line = reader.readLine()
+//                }
+//                val fhirContext = FhirContext.forR4()
+//                resource = fhirContext.newJsonParser()
+//                    .parseResource(result) as Resource
+//                fhirEngine!!.save<Resource>(resource)
+//                Snackbar.make(
+//                    cqlLibraryUrlInput!!,
+//                    "Loaded " + resource.resourceType.name + " with ID " + resource!!.id,
+//                    Snackbar.LENGTH_SHORT)
+//                    .show()
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//                Snackbar.make(cqlLibraryUrlInput!!, "Something went wrong...",
+//                    Snackbar.LENGTH_SHORT)
+//                    .show()
+//            }
             return null
         }
     }

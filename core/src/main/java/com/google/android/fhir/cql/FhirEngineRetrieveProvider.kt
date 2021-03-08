@@ -48,25 +48,27 @@ internal class FhirEngineRetrieveProvider(private val database: Database) : Retr
     ): Iterable<Any> {
         val codeList = codes.toList()
         return when (codeList.size) {
-            0 -> database.searchByReference(
-                clazz = getResourceClass(dataType),
-                reference = "$dataType.$contextPath",
-                value = if ((contextValue as String).isEmpty()) "" else "$context/$contextValue"
-            )
+            0 -> emptyList()
+//            database.searchByReference(
+//                clazz = getResourceClass(dataType),
+//                reference = "$dataType.$contextPath",
+//                value = if ((contextValue as String).isEmpty()) "" else "$context/$contextValue"
+//            )
             1 -> {
                 val code = codeList[0]
-                database.searchByReferenceAndCode(
-                    clazz = getResourceClass(dataType),
-                    reference = "$dataType.$contextPath",
-                    referenceValue = if ((contextValue as String).isEmpty()) {
-                        ""
-                    } else {
-                        "$context/$contextValue"
-                    },
-                    code = "$dataType.$codePath",
-                    codeSystem = code.system,
-                    codeValue = code.code
-                )
+                emptyList()
+//                database.searchByReferenceAndCode(
+//                    clazz = getResourceClass(dataType),
+//                    reference = "$dataType.$contextPath",
+//                    referenceValue = if ((contextValue as String).isEmpty()) {
+//                        ""
+//                    } else {
+//                        "$context/$contextValue"
+//                    },
+//                    code = "$dataType.$codePath",
+//                    codeSystem = code.system,
+//                    codeValue = code.code
+//                )
             }
             else -> emptyList()
         }

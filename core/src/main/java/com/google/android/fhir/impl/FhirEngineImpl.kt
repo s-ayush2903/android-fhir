@@ -69,20 +69,20 @@ class FhirEngineImpl constructor(
         EnumSet.noneOf(CqlEngine.Options::class.java)
     )
 
-    override fun <R : Resource> save(resource: R) {
+    override suspend fun <R : Resource> save(resource: R) {
         database.insert(resource)
     }
 
-    override fun <R : Resource> saveAll(resources: List<R>) {
+    override suspend fun <R : Resource> saveAll(resources: List<R>) {
         database.insertAll(resources)
     }
 
-    override fun <R : Resource> update(resource: R) {
+    override suspend fun <R : Resource> update(resource: R) {
         database.update(resource)
     }
 
     @Throws(ResourceNotFoundException::class)
-    override fun <R : Resource> load(clazz: Class<R>, id: String): R {
+    override suspend fun <R : Resource> load(clazz: Class<R>, id: String): R {
         return try {
             database.select(clazz, id)
         } catch (e: ResourceNotFoundInDbException) {
@@ -90,11 +90,11 @@ class FhirEngineImpl constructor(
         }
     }
 
-    override fun <R : Resource> remove(clazz: Class<R>, id: String) {
+    override suspend fun <R : Resource> remove(clazz: Class<R>, id: String) {
         database.delete(clazz, id)
     }
 
-    override fun evaluateCql(
+    override suspend fun evaluateCql(
         libraryVersionId: String,
         context: String,
         expression: String
