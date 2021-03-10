@@ -114,7 +114,7 @@ internal class DatabaseImpl(
         resources: List<Resource>
     ) {
         syncedResourceDao.insert(syncedResourceEntity)
-        insertAll(resources)
+        insertAllRemote(resources)
     }
 
     @Transaction
