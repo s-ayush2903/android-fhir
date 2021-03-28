@@ -81,9 +81,9 @@ jobs:
 #      if: matrix.api-level == 29  # don't spotless on older APIs
 #      run: ./gradlew spotlessCheck
 
-    - name: Build with Gradle
-      if: matrix.api-level == 29 # don't run full build on older APIs
-      run: ./gradlew build
+#    - name: Build with Gradle
+#      if: matrix.api-level == 29 # don't run full build on older APIs
+#      run: ./gradlew build
     - name: Run Integration Tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
