@@ -77,9 +77,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradlebuildcache-
 
-    - name: Spotless check
-      if: matrix.api-level == 29  # don't spotless on older APIs
-      run: ./gradlew spotlessCheck
+#    - name: Spotless check
+#      if: matrix.api-level == 29  # don't spotless on older APIs
+#      run: ./gradlew spotlessCheck
 
     - name: Build with Gradle
       if: matrix.api-level == 29 # don't run full build on older APIs

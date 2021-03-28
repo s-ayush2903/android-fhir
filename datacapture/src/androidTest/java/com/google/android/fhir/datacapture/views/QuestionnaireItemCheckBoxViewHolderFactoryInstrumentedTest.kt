@@ -140,18 +140,36 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
   @Test
   @UiThreadTest
   fun shouldSetAnswerToFalse() {
-    val questionnaireItemViewItem =
+
+    viewHolder.bind(
       QuestionnaireItemViewItem(
         Questionnaire.QuestionnaireItemComponent().apply { text = "Question?" },
         QuestionnaireResponse.QuestionnaireResponseItemComponent()
+          .addAnswer(
+            QuestionnaireResponse.QuestionnaireResponseItemAnswerComponent().apply {
+              value = BooleanType(true)
+            }
+          )
       ) {}
-    viewHolder.bind(questionnaireItemViewItem)
+    )
     val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
-    checkBox.apply {
-      isChecked
+    with(checkBox) {
       performClick()
       assertThat(this.isChecked).isFalse()
     }
+
+    //    val questionnaireItemViewItem =
+    //      QuestionnaireItemViewItem(
+    //        Questionnaire.QuestionnaireItemComponent().apply { text = "Question?" },
+    //        QuestionnaireResponse.QuestionnaireResponseItemComponent()
+    //      ) {}
+    //    viewHolder.bind(questionnaireItemViewItem)
+    //    val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
+    //    with(checkBox) {
+    //      isChecked
+    //      performClick()
+    //      assertThat(this.isChecked).isFalse()
+    //    }
 
     //    assertThat(checkBox.isChecked).isFalse()
   }
@@ -159,17 +177,34 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
   @Test
   @UiThreadTest
   fun shouldSetAnswerToTrue() {
-    val questionnaireItemViewItem =
+    viewHolder.bind(
       QuestionnaireItemViewItem(
         Questionnaire.QuestionnaireItemComponent().apply { text = "Question?" },
         QuestionnaireResponse.QuestionnaireResponseItemComponent()
+          .addAnswer(
+            QuestionnaireResponse.QuestionnaireResponseItemAnswerComponent().apply {
+              value = BooleanType(true)
+            }
+          )
       ) {}
-    viewHolder.bind(questionnaireItemViewItem)
-    //    viewHolder.itemView.findViewById<CheckBox>(R.id.check_box).isChecked
-
+    )
     val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
-    checkBox.performClick()
-    assertThat(checkBox.isChecked).isTrue()
+    with(checkBox) {
+      performClick()
+      assertThat(this.isChecked).isTrue()
+    }
+
+//    val questionnaireItemViewItem =
+//      QuestionnaireItemViewItem(
+//        Questionnaire.QuestionnaireItemComponent().apply { text = "Question?" },
+//        QuestionnaireResponse.QuestionnaireResponseItemComponent()
+//      ) {}
+//    viewHolder.bind(questionnaireItemViewItem)
+//    //    viewHolder.itemView.findViewById<CheckBox>(R.id.check_box).isChecked
+//
+//    val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
+//    checkBox.performClick()
+//    assertThat(checkBox.isChecked).isTrue()
     //    checkBox.performClick()
     //    assertThat(checkBox.isChecked).isFalse()
   }
