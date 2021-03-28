@@ -153,7 +153,7 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
       assertThat(this.isChecked).isFalse()
     }
 
-//    assertThat(checkBox.isChecked).isFalse()
+    //    assertThat(checkBox.isChecked).isFalse()
   }
 
   @Test
