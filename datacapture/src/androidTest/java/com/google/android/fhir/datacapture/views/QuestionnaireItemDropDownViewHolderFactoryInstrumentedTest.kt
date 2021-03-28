@@ -244,6 +244,7 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
   @Test
   @UiThreadTest
   fun shouldSelectCorrectChoiceFromDropdown() {
+    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
     val answerOption =
       Questionnaire.QuestionnaireItemAnswerOptionComponent().apply {
         value = Coding().setCode("test-dropdown").setDisplay("Test Dropdown")
@@ -255,7 +256,6 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
       ) {}
     )
 
-    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
     viewHolder
       .itemView
       .findViewById<AutoCompleteTextView>(R.id.auto_complete)
