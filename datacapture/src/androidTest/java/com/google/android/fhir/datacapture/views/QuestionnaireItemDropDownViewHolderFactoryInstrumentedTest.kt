@@ -244,11 +244,13 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
   @Test
   @UiThreadTest
   fun shouldSelectCorrectChoiceFromDropdown() {
-    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
+    // prep ans for dd
     val answerOption =
       Questionnaire.QuestionnaireItemAnswerOptionComponent().apply {
         value = Coding().setCode("test-dropdown").setDisplay("Test Dropdown")
       }
+
+    // prefill dd
     viewHolder.bind(
       QuestionnaireItemViewItem(
         Questionnaire.QuestionnaireItemComponent().apply { addAnswerOption(answerOption) },
@@ -256,12 +258,17 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
       ) {}
     )
 
-    viewHolder
-      .itemView
-      .findViewById<AutoCompleteTextView>(R.id.auto_complete)
-      //      .adapter
-      //      .getView(0, viewHolder.itemView, parent)
-      .performClick()
+    // trigger dropdown
+    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
+
+    // perf click
+    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
+//    viewHolder
+//      .itemView
+//      .findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.getItem(0).toString()
+//      //      .adapter
+//      //      .getView(0, viewHolder.itemView, parent)
+//      .performClick()
 
     assertThat(
         viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).text.toString()
