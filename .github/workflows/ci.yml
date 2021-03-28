@@ -89,7 +89,7 @@ jobs:
       with:
         api-level: ${{ matrix.api-level }}
         arch: x86_64
-        script: ./gradlew connectedCheck --stacktrace
+        script: ./gradlew :datacapture:connectedCheck --stacktrace
     - name: Release artifacts to local repo
       run: ./gradlew publishReleasePublicationToCIRepository
     - name: Upload maven repo
