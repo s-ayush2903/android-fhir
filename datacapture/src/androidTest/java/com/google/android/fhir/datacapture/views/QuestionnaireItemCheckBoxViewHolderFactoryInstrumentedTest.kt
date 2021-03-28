@@ -194,17 +194,17 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
       assertThat(this.isChecked).isTrue()
     }
 
-//    val questionnaireItemViewItem =
-//      QuestionnaireItemViewItem(
-//        Questionnaire.QuestionnaireItemComponent().apply { text = "Question?" },
-//        QuestionnaireResponse.QuestionnaireResponseItemComponent()
-//      ) {}
-//    viewHolder.bind(questionnaireItemViewItem)
-//    //    viewHolder.itemView.findViewById<CheckBox>(R.id.check_box).isChecked
-//
-//    val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
-//    checkBox.performClick()
-//    assertThat(checkBox.isChecked).isTrue()
+    //    val questionnaireItemViewItem =
+    //      QuestionnaireItemViewItem(
+    //        Questionnaire.QuestionnaireItemComponent().apply { text = "Question?" },
+    //        QuestionnaireResponse.QuestionnaireResponseItemComponent()
+    //      ) {}
+    //    viewHolder.bind(questionnaireItemViewItem)
+    //    //    viewHolder.itemView.findViewById<CheckBox>(R.id.check_box).isChecked
+    //
+    //    val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
+    //    checkBox.performClick()
+    //    assertThat(checkBox.isChecked).isTrue()
     //    checkBox.performClick()
     //    assertThat(checkBox.isChecked).isFalse()
   }
