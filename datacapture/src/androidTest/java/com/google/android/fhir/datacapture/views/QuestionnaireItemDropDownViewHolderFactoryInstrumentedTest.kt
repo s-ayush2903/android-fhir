@@ -259,8 +259,8 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
     viewHolder
       .itemView
       .findViewById<AutoCompleteTextView>(R.id.auto_complete)
-      .adapter
-      .getView(0, viewHolder.itemView, parent)
+      //      .adapter
+      //      .getView(0, viewHolder.itemView, parent)
       .performClick()
 
     assertThat(
