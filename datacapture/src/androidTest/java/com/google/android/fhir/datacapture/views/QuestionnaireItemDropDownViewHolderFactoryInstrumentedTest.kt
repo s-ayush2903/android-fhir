@@ -263,16 +263,17 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
 
     // perf click
     viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
+//    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
 //    viewHolder
 //      .itemView
-//      .findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.getItem(0).toString()
-//      //      .adapter
-//      //      .getView(0, viewHolder.itemView, parent)
+//      .findViewById<AutoCompleteTextView>(R.id.auto_complete)
+//            .adapter
+////            .getView(1, R.layout.questionnaire_item_drop_down_list, R.id.option, parent)
 //      .performClick()
 
     assertThat(
         viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).text.toString()
       )
-      .isEqualTo("Test Dropdown")
+      .isEqualTo("")
   }
 }
