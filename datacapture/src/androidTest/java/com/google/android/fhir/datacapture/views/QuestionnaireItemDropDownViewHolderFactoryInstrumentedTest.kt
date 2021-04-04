@@ -262,7 +262,7 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
     viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
 
     // perf click
-    viewHolder.itemView.performClick()
+    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.getView(1, viewHolder.itemView, parent)
 //    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
 //    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
 //    viewHolder
