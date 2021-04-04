@@ -16,6 +16,7 @@
 
 package com.google.android.fhir.datacapture.views
 
+import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -260,7 +261,7 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
 
     // trigger dropdown
     viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
-    (viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.getItem(0) as TextView).performClick()
+    (viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.getItem(0) as View).performClick()
 //    viewHolder.itemView.findFocus().performClick()
 //    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).setAdapter(R.layout.questionnaire_item_drop_down_list, R.id.auto_complete)
 
