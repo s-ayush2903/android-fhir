@@ -262,7 +262,8 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
     viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
 
     // perf click
-    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
+    viewHolder.itemView.performClick()
+//    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
 //    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
 //    viewHolder
 //      .itemView
@@ -274,6 +275,6 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
     assertThat(
         viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).text.toString()
       )
-      .isEqualTo("")
+      .isEqualTo("Test Dropdown")
   }
 }
