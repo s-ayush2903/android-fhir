@@ -255,7 +255,7 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
       ) {}
     )
 
-//    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
+    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).showDropDown()
     viewHolder
       .itemView
       .findViewById<AutoCompleteTextView>(R.id.auto_complete)
