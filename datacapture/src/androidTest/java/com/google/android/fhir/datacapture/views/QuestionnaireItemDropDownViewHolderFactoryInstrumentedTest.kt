@@ -16,7 +16,6 @@
 
 package com.google.android.fhir.datacapture.views
 
-import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -245,13 +244,10 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
   @Test
   @UiThreadTest
   fun shouldSelectCorrectChoiceFromDropdown() {
-    // prep ans for dd
     val answerOption =
       Questionnaire.QuestionnaireItemAnswerOptionComponent().apply {
         value = Coding().setCode("test-dropdown").setDisplay("Test Dropdown")
       }
-
-    // prefill dd
     viewHolder.bind(
       QuestionnaireItemViewItem(
         Questionnaire.QuestionnaireItemComponent().apply { addAnswerOption(answerOption) },
@@ -259,23 +255,13 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
       ) {}
     )
 
-    // trigger dropdown
-    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
-    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.getView(0, null, parent).performClick()
-//    (viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete)
-//    viewHolder.itemView.findFocus().performClick()
-//    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).setAdapter(R.layout.questionnaire_item_drop_down_list, R.id.auto_complete)
-
-    // perf click
-//    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.getView(1, R.layout.questionnaire_item_drop_down_list, R.id.auto_complete)
-//    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
-//    viewHolder.itemView.findViewById<TextView>(R.id.option).performClick()
-//    viewHolder
-//      .itemView
-//      .findViewById<AutoCompleteTextView>(R.id.auto_complete)
-//            .adapter
-////            .getView(1, R.layout.questionnaire_item_drop_down_list, R.id.option, parent)
-//      .performClick()
+//    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
+    viewHolder
+      .itemView
+      .findViewById<AutoCompleteTextView>(R.id.auto_complete)
+      .adapter
+      .getView(0, null, parent)
+      .performClick()
 
     assertThat(
         viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).text.toString()
