@@ -219,4 +219,54 @@ class QuestionnaireItemDropDownViewHolderFactoryInstrumentedTest {
       )
     }
   }
+
+  @Test
+  @UiThreadTest
+  fun shouldDisplayDropdown() {
+    val answerOption =
+      Questionnaire.QuestionnaireItemAnswerOptionComponent().apply {
+        value = Coding().setCode("test-dropdown").setDisplay("Test Dropdown")
+      }
+    viewHolder.bind(
+      QuestionnaireItemViewItem(
+        Questionnaire.QuestionnaireItemComponent().apply { addAnswerOption(answerOption) },
+        QuestionnaireResponse.QuestionnaireResponseItemComponent()
+      ) {}
+    )
+
+    assertThat(viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()).isTrue()
+    assertThat(
+        viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).adapter.count
+      )
+      .isEqualTo(1)
+  }
+
+//  @Test
+//  @UiThreadTest
+//  fun shouldSelectCorrectChoiceFromDropdown() {
+//    val answerOption =
+//      Questionnaire.QuestionnaireItemAnswerOptionComponent().apply {
+//        value = Coding().setCode("test-dropdown").setDisplay("Test Dropdown")
+//      }
+//    viewHolder.bind(
+//      QuestionnaireItemViewItem(
+//        Questionnaire.QuestionnaireItemComponent().apply { addAnswerOption(answerOption) },
+//        QuestionnaireResponse.QuestionnaireResponseItemComponent()
+//      ) {}
+//    )
+//
+//    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).performClick()
+//    viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).showDropDown()
+//    viewHolder
+//      .itemView
+//      .findViewById<AutoCompleteTextView>(R.id.auto_complete)
+//      .adapter
+//      .getView(0, null, parent)
+//      .performClick()
+//
+//    assertThat(
+//        viewHolder.itemView.findViewById<AutoCompleteTextView>(R.id.auto_complete).text.toString()
+//      )
+//      .isEqualTo("Test Dropdown")
+//  }
 }

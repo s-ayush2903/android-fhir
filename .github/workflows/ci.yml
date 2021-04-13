@@ -36,10 +36,10 @@ jobs:
         api-level: [24, 27, 29]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Cancel previous
-      uses: styfle/cancel-workflow-action@0.7.0
-      with:
-        access_token: ${{ github.token }}
+#    - name: Cancel previous
+#      uses: styfle/cancel-workflow-action@0.7.0
+#      with:
+#        access_token: ${{ github.token }}
     
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
@@ -77,19 +77,19 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradlebuildcache-
 
-    - name: Spotless check
-      if: matrix.api-level == 29  # don't spotless on older APIs
-      run: ./gradlew spotlessCheck
+#    - name: Spotless check
+#      if: matrix.api-level == 29  # don't spotless on older APIs
+#      run: ./gradlew spotlessCheck
 
-    - name: Build with Gradle
-      if: matrix.api-level == 29 # don't run full build on older APIs
-      run: ./gradlew build
+#    - name: Build with Gradle
+#      if: matrix.api-level == 29 # don't run full build on older APIs
+#      run: ./gradlew build
     - name: Run Integration Tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: ${{ matrix.api-level }}
         arch: x86_64
-        script: ./gradlew connectedCheck --stacktrace
+        script: ./gradlew :datacapture:connectedCheck --stacktrace
     - name: Release artifacts to local repo
       run: ./gradlew publishReleasePublicationToCIRepository
     - name: Upload maven repo
