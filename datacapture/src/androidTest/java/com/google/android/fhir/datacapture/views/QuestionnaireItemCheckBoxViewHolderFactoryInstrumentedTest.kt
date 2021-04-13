@@ -149,7 +149,7 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
 
     val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
 //    viewHolder.itemView.findViewById<CheckBox>(R.id.check_box).performClick()
-checkBox.isChecked
+checkBox.performClick()
     checkBox.performClick()
 
 //    with(checkBox) {
