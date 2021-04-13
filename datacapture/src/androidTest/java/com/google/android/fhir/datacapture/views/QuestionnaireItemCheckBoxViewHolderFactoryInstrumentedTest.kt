@@ -139,6 +139,29 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
 
   @Test
   @UiThreadTest
+  fun shouldSetQuestionnaireResponseItemComponentAnswer1() {
+    val questionnaireItemViewItem =
+            QuestionnaireItemViewItem(
+                    Questionnaire.QuestionnaireItemComponent().apply { text = "Question?" },
+                    QuestionnaireResponse.QuestionnaireResponseItemComponent()
+            ) {}
+    viewHolder.bind(questionnaireItemViewItem)
+
+    val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
+//    viewHolder.itemView.findViewById<CheckBox>(R.id.check_box).performClick()
+
+    with(checkBox) {
+      isChecked
+      performClick()
+    }
+
+    val answer = questionnaireItemViewItem.questionnaireResponseItem.answer
+    assertThat(answer.size).isEqualTo(0)
+    assertThat(answer[0].valueBooleanType.value).isFalse()
+  }
+
+  @Test
+  @UiThreadTest
   fun shouldSetAnswerToFalse() {
 
     viewHolder.bind(
