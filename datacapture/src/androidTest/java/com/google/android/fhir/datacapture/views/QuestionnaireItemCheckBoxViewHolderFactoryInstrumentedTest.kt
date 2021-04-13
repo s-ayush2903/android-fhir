@@ -147,10 +147,10 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
             ) {}
     viewHolder.bind(questionnaireItemViewItem)
 
-//    val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
+    val checkBox = viewHolder.itemView.findViewById<CheckBox>(R.id.check_box)
 //    viewHolder.itemView.findViewById<CheckBox>(R.id.check_box).performClick()
-//checkBox.isChecked
-//    checkBox.performClick()
+checkBox.isChecked
+    checkBox.performClick()
 
 //    with(checkBox) {
 //      isChecked
@@ -159,7 +159,7 @@ class QuestionnaireItemCheckBoxViewHolderFactoryInstrumentedTest {
 
     val answer = questionnaireItemViewItem.questionnaireResponseItem.answer
 
-    assertThat(answer.size).isEqualTo(0)
+    assertThat(answer.size).isEqualTo(1)
     assertThat(answer[0].valueBooleanType.value).isFalse()
   }
 
